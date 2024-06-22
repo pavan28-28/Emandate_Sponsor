@@ -1,0 +1,51 @@
+/* Add your custom styles here */
+ 
+.container {
+    max-width: 400px;
+    margin: 0 auto;
+    padding: 20px;
+    border: 1px solid rgb(251, 29, 4);
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(217, 0, 217,0.7);
+    background-color: rgba(255, 132, 255,0.3);
+    text-align: center;
+}
+ 
+h1 {
+    margin-bottom: 20px;
+}
+ 
+.form-group {
+    margin-bottom: 20px;
+}
+ 
+.form-control {
+    width: 70%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+}
+ 
+.btn {
+    padding: 10px 20px;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    background-color: #007bff;
+    color: #fff;
+    cursor: pointer;
+}
+ 
+.message {
+    margin-top: 20px;
+    font-size: 16px;
+    color: #007bff;
+}
+ 
+.back-link {
+    display: inline-block;
+    margin-top: 20px;
+    text-decoration: none;
+    color: #007bff;
+}

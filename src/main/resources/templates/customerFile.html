@@ -1,0 +1,396 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<meta http-equiv="X-UA-Compatible" content="IE=edge;IE=11">
+
+<head>
+	<!-- Required meta tags -->
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<title>E-nach</title>
+	<!-- Bootstrap CSS -->
+	<link rel="stylesheet" th:href="@{/bootstrap.min.css}" />
+
+	<link rel="stylesheet" th:href="@{/main.css}" />
+	<link rel="stylesheet" th:href="@{/font-awesome.min.css}">
+	<!-- new version  -->
+	<script th:src="@{/jquery-3.5.1.min.js}"></script>
+	<script th:src="@{/popper.min.js}"></script>
+	<script th:src="@{/bootstrap.min.js}"></script>
+	<script th:src="@{/main.js}"></script>
+	<link rel="stylesheet" th:href="@{/datepicker.css}" type="text/css" />
+	<script th:src="@{/bootstrap-datepicker.js}"></script>
+	<script th:src="@{/aes.js}" type="text/javascript"></script>
+	<script th:src="@{/pbkdf2.js}"></script>
+	<style type="text/css">
+		.error {
+			color: red;
+			font-size: 11px;
+			margin-top: 5px;
+		}
+
+		input.error,
+		select.error {
+			border: 1px solid red !important;
+		}
+
+		.error:focus,
+		input.error-select:focus {
+			border: 1px solid red !important;
+			outline: none;
+			/* Optional: Remove default outline */
+		}
+	</style>
+</head>
+
+<body class="mandate_page">
+	<!-- nav for desktop -->
+	<div class="container1 statementWrapper">
+		<div class="top-bar">
+			<img src="/img/cedge-logo.png" style="height: 45px;width: 132px;margin-top: 10px;margin-left: 10px;">
+		</div>
+		<div class="logo-top">
+			<div class="Logo"></div>
+		</div>
+	</div>
+	<!--- Navbar Code End -->
+
+	<section class="main-section">
+		<form id="mandateForm" name="mandateForm" th:action="@{/submitForm}" th:object="${CustDetails}" method="post">
+			<div class="container">
+				<div class="row">
+					<div class="col-lg-12 col-md-12 detail-col">
+						<h3>Customer Information</h3>
+						<div class="form_div row">
+
+							<p id="errorMessage1" style="display:none" class="error">Currently we are unable to process
+								your request.</p>
+							<input type="hidden" th:field="*{token}" />
+							<div class="form-group col-lg-6 col-md-12 error_input loanno">
+								<label for="account_no" class="label-text error_input">Creditor Account Number*</label>
+								<div class="input-div">
+									<input th:field="*{creditor_Number}" id="creditorAccountNumber"
+										class="acc error-select" data-validation-error-msg="Enter Valid Account number"
+										value="1234567890123456" type="text" maxlength="16" readonly />
+									<!-- <p id="loanAcNoError" class="error"></p> -->
+								</div>
+							</div>
+							<div class="form-group col-lg-6 col-md-12 error_input name">
+								<label for="full_n" class="label-text">Full Name*</label>
+								<div class="input-div">
+									<input id="fullName" th:field="*{name}" class="name" type="text" maxlength="50"
+										readonly />
+									<!--  <p id="nameError" class="error"></p> -->
+								</div>
+							</div>
+							<div class="form-group col-lg-6 col-md-12 error_input mobile">
+								<label for="mobile" class="label-text">Mobile Number*</label>
+								<div class="input-div">
+									<input id="mobileNumber" th:field="*{mobile}" class="mobile" readonly type="text"
+										maxlength="10" />
+									<!-- <p id="mobileNumberError" class="error"></p> -->
+								</div>
+							</div>
+							<div class="form-group col-lg-6 col-md-12 error_input loanAmount">
+								<label for="relation" class="label-text">Loan Amount*</label>
+								<div class="input-div">
+									<input id="loanAmount" th:field="*{loan_amt}" type="text" class="rupee" readonly
+										maxlength="10" />
+									<!-- <p id="loanAmountError" class="error"></p> -->
+								</div>
+							</div>
+						</div>
+
+
+						<h3 class="margin-top-label">Debit Account Details</h3>
+						<div class="form_div row">
+
+
+							<div class="form-group col-lg-6 col-md-12 error_input loanno">
+								<label for="account_no" class="label-text error_input">Debit Account Number*</label>
+								<div class="input-div">
+									<input id="debitAccountNumber" th:field="*{debit_Account_number}" type="text"
+										maxlength="16" />
+									<p id="debitAccountNumberError" class="error"></p>
+								</div>
+							</div>
+							<div class="form-group col-lg-6 col-md-12 error_input name">
+								<label for="full_n" class="label-text">Confirm Account Number*</label>
+								<div class="input-div">
+									<input id="confirmAccountNumber" th:field="*{confirm_debit_account}" type="text"
+										maxlength="16" />
+									<p id="confirmAccountNumberError" class="error"></p>
+								</div>
+							</div>
+							
+							<div class="form-group dropdown-form col-lg-6">
+								<label for="select_freq" class="label-text">Select Account Type*</label>
+								<div class="md-select freq-select">
+									<label for="ul-id1">
+										<select name="hidFname" id="hidFname" th:field="*{account_type}">
+											<option value="select">Select</option>
+											<option value="Saving">Saving</option>
+											<option value="Current">Current</option>
+										</select>
+										<p id="hidFnameError" class="error"></p>
+									</label>
+								</div>
+							</div>
+							
+							
+							<!--<div class="form-group dropdown-form col-lg-6">
+								<label for="select_freq" class="label-text">Select Account Type*</label>
+								<div class="md-select freq-select">
+									<label for="ul-id1">
+										<select name="selectAccountTypeButton" id="selectAccountTypeButton" th:field="*{account_type}">
+											<option selected="selected" class="md-select payment-select">Select account type</option>
+											<option th:value="'Saving'" class="md-select payment-select" th:text="'Saving'" th:onclick="'selectAccountType(this, \'Saving\')'"> Saving</option>
+											<option th:value="'Current'" class="md-select payment-select" th:text="'Current'" th:onclick="'selectAccountType(this, \'Current\')'"> Current</option>
+										</select>
+										<p id="selectAccountTypeButtonError" class="error"></p>
+									</label>
+								</div>
+							</div>-->
+
+	                        <div class="form-group dropdown-form col-lg-6">
+								<label for="select_freq" class="label-text">Select Bank*</label>
+								<div class="md-select freq-select">
+									<label for="ul-id1">
+										<select name="hidFname" id="hidFname" th:field="*{bank}">
+											<option value="select">Select</option>
+											<option value="Axis Bank">Axis Bank</option>
+											<option value="HDFC Bank">HDFC Bank</option>
+											<option value="SBI Bank">SBI Bank</option>
+										</select>
+										<p id="hidFnameError" class="error"></p>
+									</label>
+								</div>
+							</div>
+							
+
+							<!--<div class="form-group dropdown-form col-lg-6">
+								<label for="select_freq" class="label-text">Select Bank*</label>
+								<div class="md-select freq-select">
+									<label for="ul-id1">
+										<select name="selectBankButton" id="selectBankButton" th:field="*{bank}">
+											<option selected="selected" value="" class="md-select bank-select">Select Bank</option>
+											<option th:value="'Axis Bank'" th:onclick="'selectBank(this, \'Axis Bank\')'" class="md-select bank-select">Axis Bank</option>
+											<option th:value="'HDFC Bank'" th:onclick="'selectBank(this, \'HDFC Bank\')'" class="md-select bank-select">HDFC Bank</option>
+											<option th:value="'SBI Bank'" th:onclick="'selectBank(this, \'SBI Bank\')'" class="md-select bank-select">SBI Bank</option>
+										</select>
+										<p id="selectBankButtonError" class="error"></p>
+									</label>
+                                  </div>
+							</div>-->
+						
+						 <div class="form-group dropdown-form col-lg-6">
+								<label for="select_freq" class="label-text">Create mandate with*</label>
+								<div class="md-select freq-select">
+									<label for="ul-id1">
+										<select name="hidFname" id="hidFname" th:field="*{mandate_type}">
+											<option value="select">Select</option>
+											<option value="Aadhaar">Aadhaar</option>
+											<option value="Net Banking">Net Banking</option>
+											<option value="Debit Card">Debit Card</option>
+										</select>
+										<p id="hidFnameError" class="error"></p>
+									</label>
+								</div>
+							</div>
+						
+							<!--<div class="form-group dropdown-form col-lg-6">
+								<label for="select_freq" class="label-text">Create mandate with*</label>
+								<div class="md-select freq-select">
+									<label for="ul-id1">
+										<select name="selectAuthModeButton" id="selectAuthModeButton" th:field="*{mandate_type}">
+											<option selected="selected" value="" class="md-select bank-select">Select Mandate Type</option>
+
+											<option th:value="${Aadhaar}" th:text="'Aadhaar'" th:onclick="'selectAuthMode(this, \'Aadhaar\')'" class="md-select payment-select">Aadhaar number</option>
+											<option th:value="${Net Banking}" class="md-select payment-select">Net Banking</option>
+											<option th:value="${Debit Card}" class="md-select payment-select">Debit Card
+											</option>
+										</select>
+										<p id="selectAuthModeButtonError" class="error"></p>
+									</label>
+								</div>
+							</div>-->
+						</div>
+						
+						
+						<!-- Add other form fields here -->
+						<h3 class="margin-top-label">Mandate Information</h3>
+
+						<div class="form_div row">
+							<div class="form-group col-lg-6 error_input emiAmt">
+								<label for="relation" class="label-text">Collection Amount *</label>
+								<div class="input-div">
+									<input id="collectionAmount" value="2000" th:field="*{collection_amt}" type="text"
+										class="rupee" maxlength="9" readonly />
+									<!-- <p id="emiAmountError" class="error"></p> -->
+								</div>
+							</div>
+
+
+
+							<div class="form-group dropdown-form col-lg-6">
+								<label for="select_freq" class="label-text">Collection Frequency *</label>
+
+
+								<div class="md-select freq-select">
+
+
+
+									<input type="text" id="collectionFrequencyButton" value="2000.09"
+										th:field="*{frequency}" readonly />
+
+
+									<ul role="listbox" id="ul-id1" class="md-whiteframe-z1"
+										aria-activedescendant="coll-freq" name="ul-id1"></ul>
+									<!-- <p id="hidFnameError" class="error"></p>       -->
+								</div>
+
+							</div>
+							<div class="form-group col-lg-6 emiStart">
+								<label for="date_start" class="label-text">First Collection Date*</label>
+								<div class="input-div">
+									<input id="datepicker_first" th:field="*{coll_first_date}" type="text" class="date_input" value="" readonly />
+									<!-- <p id="datepicker_firstError" class="error"></p>  -->
+								</div>
+
+							</div>
+
+							<div class="form-group col-lg-6 emiStart">
+								<label for="date_start" class="label-text">Last Collection Date*</label>
+								<div class="input-div">
+									<input id="datepicker_last" th:field="*{coll_last_date}" type="text" class="date_input" value="" readonly />
+									<!-- <p id="datepicker_lastError" class="error"></p>  -->
+								</div>
+
+							</div>
+
+						</div>
+
+
+						<center><button type="submit" class="cta authorize_btn margin-top-label deactive"
+								id="submitMandate" value="Submit Mandate">Submit Mandate</button></center>
+						
+		</form>
+	</section>
+	<section class="note"></section>
+
+	<script type="text/javascript">
+		$(document).ready(function () {
+			$('#mandateForm').submit(function (event) {
+				event.preventDefault();
+				if (validateForm()) {
+					alert('Form submitted successfully!');
+					this.submit(); // Submit the form
+				} else {
+
+				}
+			});
+			$("#debitAccountNumber, #confirmAccountNumber, #mobileNumber, #loanAmount, #emiAmount").on('input', function () {
+				this.value = this.value.replace(/[^0-9.]/g, '');
+			});
+			$('input, select').on('keyup change', function () {
+				validateField($(this));
+			});
+
+			function validateField($field) {
+				const fieldId = $field.attr('id');
+				const fieldValue = $field.val().trim();
+
+				if (fieldValue === '') {
+					showValidationMessage(fieldId, false, `${getFieldName(fieldId)} should not be empty`);
+					return false;
+				} else {
+					let isValid = true;
+					switch (fieldId) {
+						case 'debitAccountNumber':
+							isValid = /^[0-9]{16}$/.test(fieldValue);
+							showValidationMessage(fieldId, isValid, 'Debit Account Number must be 16 digits.');
+							break;
+						case 'confirmAccountNumber':
+							const accountNumber = document.getElementById('debitAccountNumber').value;
+							isValid = fieldValue == accountNumber;
+							showValidationMessage(fieldId, isValid, 'Debtor Account Number does not match');
+
+							break;
+						case 'selectAccountTypeButton':
+							isValid = fieldValue !== '';
+							showValidationMessage(fieldId, isValid, 'Please select acount type.');
+
+							break;
+
+						case 'selectBankButton':
+							isValid = fieldValue !== '';
+							showValidationMessage(fieldId, isValid, 'Please select bank.');
+
+							break;
+
+						case 'selectAuthModeButton':
+							isValid = fieldValue !== '';
+							showValidationMessage(fieldId, isValid, 'Please select payment type');
+
+							break;
+
+						case 'datepicker_first':
+						case 'datepicker_last':
+							isValid = fieldValue !== '';
+							showValidationMessage(fieldId, isValid, 'This field is required.');
+							break;
+						// Add cases for other fields here
+					}
+					return isValid;
+				}
+			}
+
+			function validateForm() {
+				let isFormValid = true;
+				$('input, select').each(function () {
+					if (!validateField($(this))) {
+						isFormValid = false;
+					}
+				});
+				return isFormValid;
+			}
+
+			function showValidationMessage(fieldId, isValid, message) {
+				const $errorElement = $('#' + fieldId + 'Error');
+				const $field = $('#' + fieldId);
+
+				if (!isValid) {
+					$errorElement.text(message);
+					$field.addClass('error');
+					if ($field.is('select')) {
+						$field.addClass('error-select');
+					}
+				} else {
+					$errorElement.text('');
+					$field.removeClass('error');
+					$field.removeClass('error-select');
+				}
+			}
+
+			function getFieldName(fieldId) {
+				switch (fieldId) {
+					case 'debitAccountNumber': return 'Debit Account Number';
+					case 'confirmAccountNumber': return 'Confirm Account Number';
+					case 'selectAccountTypeButton': return 'Account Type';
+					case 'selectBankButton': return 'Bank Name';
+					case 'selectAuthModeButton': return 'Mandate type';
+					case 'datepicker_first': return 'First Collection Date';
+					case 'datepicker_last': return 'Last Collection Date';
+					// Add cases for other fields here
+					default: return '';
+				}
+			}
+		});
+	</script>
+	<script type="text/javascript">
+		document.querySelectorAll('label').forEach(label => label.innerHTML = label.innerHTML.replace(/\*/g, '<span style="color: red;">&nbsp*</span>'));
+
+	</script>
+</body>
+
+</html>

@@ -1,0 +1,292 @@
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8">
+	<title>Customer Information</title>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+	<link rel="stylesheet"
+		href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
+	<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+	<script
+		src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+	<style>
+		.dropdown-menu {
+			cursor: pointer;
+		}
+
+		.card.active {
+			border: 2px solid #007bff;
+		}
+
+		.dropdown-bank,
+		.dropdown_acc_type,
+		.dropdown_collection_type,
+		.dropdown_collection_freq,
+		.dropdown_create_mandate
+		.dropdown-auth {
+			position: relative;
+		}
+
+		.dropdown-bank.expanded ul,
+		.dropdown_acc_type.expanded ul,
+		.dropdown_collection_type.expanded ul,
+		.dropdown_collection_freq.expanded ul,
+		.dropdown_create_mandate.expanded ul, 
+		.dropdown-auth.expanded ul{
+			display: block;
+		}
+	</style>
+</head>
+
+<body>
+ <div class="top-bar">
+     <img src="img/cedge-logo.png" style="height: 45px;width: 132px;margin-top: 10px;margin-left: 10px;">
+    </div>
+    <div class="logo-top">
+      <div class="Logo"></div>
+    </div>
+  </div>
+	<div class="container">
+		<h2>Customer Information</h2>
+		<form id="mandateForm" th:action="@{/submitForm}" th:object="${CustDetails}" method="post">
+		<div class="container1 statementWrapper">
+   
+			<div class="form-group">
+				<label for="creditorAccountNumber">Creditor Account Number *</label>
+				<input type="text" class="form-control" id="creditorAccountNumber" th:field="*{creditor_Number}"
+					readonly>
+			</div>
+			<div class="form-group">
+				<label for="fullName">Full Name *</label>
+				<input type="text" class="form-control" id="fullName" th:field="*{name}" readonly>
+			</div>
+			<div class="form-group">
+				<label for="mobileNumber">Mobile Number *</label>
+				<input type="text" class="form-control" id="mobileNumber" th:field="*{mobile}" readonly>
+			</div>
+			<div class="form-group">
+				<label for="loanAmount">Loan Amount *</label>
+				<input type="number" class="form-control" id="loanAmount" th:field="*{loan_amt}" readonly>
+			</div>
+
+			<h2>Debit Account Details</h2>
+			<div class="form-group">
+				<label for="debitAccountNumber">Debit Account Number *</label>
+				<input type="text" class="form-control" id="debitAccountNumber" th:field="*{debit_Account_number}"
+					required>
+			</div>
+			<div class="form-group">
+				<label for="confirmAccountNumber">Confirm Account Number *</label>
+				<input type="text" class="form-control" id="confirmAccountNumber" th:field="*{confirm_debit_account}"
+					required>
+			</div>
+			<div class="form-group">
+				<label for="selectAccountType">Select Account Type *</label>
+				<div class="dropdown_acc_type">
+					<button class="btn btn-secondary dropdown-toggle" type="button" id="selectAccountTypeButton"
+						data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+						Select account type
+					</button>
+					<ul class="dropdown-menu" aria-labelledby="selectAccountTypeButton">
+						<!--<li th:each="account_type : ${account_type}" th:text="${account_type}" th:onclick="'selectAccountType(this, ' + ${accountType} + ')'">Saving</li>-->
+						<li th:text="'Saving'" th:onclick="'selectAccountType(this, \'Saving\')'"></li>
+						<li th:text="'Current'" th:onclick="'selectAccountType(this, \'Current\')'"></li>
+
+					</ul>
+				</div>
+				<input type="hidden" id="selectAccountType" th:field="*{account_type}">
+			</div>
+			
+			<div class="form-group">
+				<label for="selectBank">Select Bank *</label>
+				<div class="dropdown-bank">
+					<button class="btn btn-secondary dropdown-toggle" type="button" id="selectBankButton"
+						data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+						Select Bank
+					</button>
+					<ul class="dropdown-menu" aria-labelledby="selectBankButton">
+						<!-- Demo banks, replace with actual Thymeleaf iteration -->
+						<li th:text="'Axis Bank'" th:onclick="'selectBank(this, \'Axis Bank\')'"></li>
+						<li th:text="'HDFC Bank'" th:onclick="'selectBank(this, \'HDFC Bank\')'"></li>
+						<li th:text="'SBI Bank'" th:onclick="'selectBank(this, \'SBI Bank\')'"></li>
+					</ul>
+				</div>
+				<input type="hidden" id="selectBank" th:field="*{bank}">
+			</div>
+
+			<div class="form-group">
+				<label for="selectAuthMode">Select Authentication Mode *</label>
+				<div class="dropdown-auth">
+					<button class="btn btn-secondary dropdown-toggle" type="button" id="selectAuthModeButton"
+						data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+						Select Authentication Mode
+					</button>
+					<ul class="dropdown-menu" aria-labelledby="selectAuthModeButton">
+						<li th:text="'Debit Card'" th:onclick="'selectAuthMode(this, \'Debit Card\')'"></li>
+						<li th:text="'Aadhar Card'" th:onclick="'selectAuthMode(this, \'Aadhar Card\')'"></li>
+						<li th:text="'Net Banking'" th:onclick="'selectAuthMode(this, \'Net Banking\')'"></li>
+					</ul>
+				</div>
+				<input type="hidden" id="selectAuthMode" th:field="*{mandate_type}">
+			</div>
+
+
+
+			<h2>Mandate Information</h2>
+			<div class="form-group">
+				<label for="collectionAmount">Collection Amount *</label>
+				<input type="number" class="form-control" id="collectionAmount" th:field="*{collection_amt}" readonly>
+			</div>
+
+			<div class="form-group">
+				<label for="collectionAmount">Collection Frequency *</label>
+				<input type="text" class="form-control" id="collectionFrequencyButton" th:field="*{frequency}" readonly>
+			</div>
+
+			<div class="form-group">
+				<label for="datepicker_first">First Collection Date *</label>
+				<input type="text" class="form-control" id="datepicker_first" th:field="*{coll_first_date}" readonly>
+			</div>
+			<div class="form-group">
+				<label for="datepicker_last">Last Collection Date *</label>
+				<input type="text" class="form-control" id="datepicker_last" th:field="*{coll_last_date}" readonly>
+			</div>
+			<button type="submit" class="btn btn-primary" id="submitMandate">Submit Mandate</button>
+		</form>
+	</div>
+
+	<script>
+		$(document).ready(function () {
+			/********** Bootstrap Datepicker **************/
+			function initializeDatepickers() {
+				$("#datepicker_first").datepicker({
+					autoclose: true,
+					startDate: '-0m',
+					format: 'dd-mm-yyyy',
+					todayHighlight: true
+				}).on('changeDate', function (ev) {
+					validateDates();
+				});
+
+				$("#datepicker_last").datepicker({
+					autoclose: true,
+					startDate: '-0m',
+					format: 'dd-mm-yyyy',
+					todayHighlight: true
+				}).on('changeDate', function (ev) {
+					validateDates();
+				});
+			}
+
+			function validateDates() {
+				var startDate = $("#datepicker_first").datepicker('getDate');
+				var endDate = $("#datepicker_last").datepicker('getDate');
+
+				if (startDate && endDate) {
+					if (endDate <= startDate) {
+						alert("Last date should be greater than the first date.");
+						$("#datepicker_last").val('');
+						return;
+					}
+
+					var minEndDate = new Date(startDate);
+					minEndDate.setMonth(minEndDate.getMonth() + 1);
+					var maxEndDate = new Date(startDate);
+					maxEndDate.setFullYear(maxEndDate.getFullYear() + 40);
+
+					if (endDate < minEndDate || endDate > maxEndDate) {
+						alert("The gap between the first date and the last date should be at least one month and at most 40 years.");
+						$("#datepicker_last").val('');
+						return;
+					}
+				}
+			}
+
+			initializeDatepickers();
+			/********** End Bootstrap Datepicker **************/
+
+			/********** Code for Select Card **************/
+			$('.region .card').on('click', function () {
+				$(".region .card").removeClass("active");
+				$(this).addClass("active");
+			});
+			/********** End Code for Select Card **************/
+
+			/********** Custom Dropdowns **************/
+			function toggleDropdown(element, className) {
+				element.click(function (e) {
+					e.preventDefault();
+					e.stopPropagation();
+					$(this).toggleClass('expanded');
+					$('#' + $(e.target).attr('for')).prop('checked', true);
+				});
+			}
+
+			function closeDropdownOnClickOutside(className) {
+				$(document).click(function () {
+					$(className).removeClass('expanded');
+				});
+			}
+
+			toggleDropdown($('.dropdown-bank'), '.dropdown-bank');
+			closeDropdownOnClickOutside('.dropdown-bank');
+			
+			
+			toggleDropdown($('.dropdown-auth'), '.dropdown-auth');
+			closeDropdownOnClickOutside('.dropdown-auth');
+
+			toggleDropdown($('.dropdown_acc_type'), '.dropdown_acc_type');
+			closeDropdownOnClickOutside('.dropdown_acc_type');
+
+			toggleDropdown($('.dropdown_collection_type'), '.dropdown_collection_type');
+			closeDropdownOnClickOutside('.dropdown_collection_type');
+
+			toggleDropdown($('.dropdown_collection_freq'), '.dropdown_collection_freq');
+			closeDropdownOnClickOutside('.dropdown_collection_freq');
+
+			toggleDropdown($('.dropdown_create_mandate'), '.dropdown_create_mandate');
+			closeDropdownOnClickOutside('.dropdown_create_mandate');
+
+			$('.payment-select').on('click', function () {
+				$(this).toggleClass('active');
+			});
+
+			$('.payment-option').on('click', function (e) {
+				e.stopPropagation();
+				let option = $(this).data('value');
+				$('.payment-select').removeClass('active').html(option);
+			});
+			/********** End Custom Dropdowns **************/
+		});
+
+		function selectAccountType(element, value) {
+			$('#selectAccountTypeButton').text(value);
+			$('#selectAccountType').val(value);
+			$('.dropdown_acc_type').removeClass('expanded');
+		}
+
+		function selectAuthMode(element, value) {
+			alert("inside authmore");
+			$('#selectAuthModeButton').text(value); // Update button text
+			$('#selectAuthMode').val(value); // Update hidden input value
+			$('.dropdown-auth').removeClass('expanded'); // Close dropdown (if needed)
+		}
+
+		function selectBank(element, value) {
+			alert("inside authmore");
+			$('#selectBankButton').text(value);
+			$('#selectBank').val(value);
+			$('.dropdown-bank').removeClass('expanded');
+		}
+
+		function selectFrequency(element, value) {
+			$('#collectionFrequencyButton').text(value);
+			$('#collectionFrequency').val(value);
+			$('.dropdown_collection_freq').removeClass('expanded');
+		}
+	</script>
+</body>
+
+</html>
